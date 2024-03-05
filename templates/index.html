@@ -1,51 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{url_for('static',filename='css/output.css')}}" rel="stylesheet">
     <title>Document</title>
+    <link href="{{url_for('static',filename='css/output.css')}}" rel="stylesheet">
 </head>
-<body class="bg-gray-200 p-6">
-    <div class="max-w-md mx-auto bg-white rounded-md p-8 shadow-md">
-        <h2 class="text-2xl font-semibold mb-6">Address Form</h2>
 
-        <!-- Address Form -->
-        <form action="{{ url_for('lat_lon') }}" method="POST" enctype="multipart/form-data">
-            <!-- Address Input -->
-            <div class="mb-4">
-                <label for="address1" class="block text-gray-700 text-sm font-bold mb-2">Address:</label>
-                <input type="text" id="start_address"  name="start_address" placeholder="Enter your address"
-                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+<body>
+    <div class="relative bg-[url('/static/img/banner-01.jpg')] bg-no-repeat  max-w-full max-h-full bg-cover ">
+
+        <div class=" bg-black opacity-[0.35] w-full h-full">
+        </div>
+
+
+        <div class="content">
+
+            <div class="header p-6 flex justify-around items-center text-white">
+                <div class="text-3xl">Name</div>
+                <div class="flex">
+                    <div class="mx-5">Home</div>
+                    <div class="mx-5">Pages</div>
+                    <div class="mx-5">Station</div>
+                    <div class="mx-5">Contact</div>
+                </div>
             </div>
 
-            <div class="mb-4">
-                <label for="address2" class="block text-gray-700 text-sm font-bold mb-2">Address:</label>
-                <input type="text" id="end_address"  name="end_address" placeholder="Enter your address"
-                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
-            </div>
+            <hr>
 
-           
-
-            <!-- Submit Button -->
-            <button type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
-                Submit
-            </button>
-
-            <div class="lat_lon mt-6 flex justify-center">
-                <h1 class="block text-gray-700 text-sm font-bold mb-2">Start :</>
-                Lat: {{ start[0]}}, Long: {{ start[1] }}
-        
+            <div class="text-left ml-24 mr-[32rem] mt-[5rem] ">
+                <p class="text-[#528dde] font-medium text-xl">Welcome to EV SPARK</p>
+                <h1 class="mt-6 text-7xl font-semibold text-white">Electric vehicles are the future for real this time</h1>
+                <div class="mt-6 mb-10">
+                    <a href="#_"
+                        class="inline-block px-5 py-2 mx-auto text-white bg-blue-600 rounded-full hover:bg-blue-700 md:mx-0 duration-500 mb-10 mt-5">
+                        Button Text
+                    </a>
+                </div>
             </div>
 
 
-            <div class="lat_lon mt-6 flex justify-center">
-                <h1 class="block text-gray-700 text-sm font-bold mb-2">End :</>
-                Lat: {{ end[0] }}, Long: {{ end[1]}}
-            </div>
+        </div>
 
-        </form>
+
+
     </div>
+
+
+    <div class="hero-section flex justify-around  mt-10">
+        <div class="left flex flex-col ml-24 ">
+            <div class="w-[15rem]">
+                <p class="text-4xl text-[#3d5871] font-semibold">We are known for genuine services</p>
+            </div>
+
+            <div class="mt-7">
+                <img style="width: 24rem; height: 25rem;"
+                    src="https://themes.potenzaglobalsolutions.com/html/ev-spark/images/home-01/about-01.jpg" alt="">
+            </div>
+        </div>
+
+        <div  class="w-[32%] flex flex-col  justify-center items-">
+
+            <form id="distanceForm" action="{{ url_for('get_direction') }}" method="POST" enctype="multipart/form-data">
+                <!-- Address Input -->
+                <div class="mb-4">
+                    <label for="address1" class="block text-gray-700 text-sm font-bold mb-2">Source</label>
+                    <input type="text" id="start_address" value="{{start_add}}" name="start_address" placeholder="Source address"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+                </div>
+    
+                <div class="mb-4">
+                    <label for="address2" class="block text-gray-700 text-sm font-bold mb-2">Destination</label>
+                    <input type="text" id="end_address" value="{{end_add}}"  name="end_address" placeholder="Destination address"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+                </div>
+    
+               
+    
+                <!-- Submit Button -->
+                <button type="submit"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                    Submit
+                </button>
+<!--     
+                <div class="lat_lon mt-6 flex justify-center">
+                    <h1 class="block text-gray-700 text-sm font-bold mb-2">Start :</>
+                    Lat: {{ start[0]}}, Long: {{ start[1] }}
+            
+                </div> -->
+    
+    
+            </form>
+            <div id="distanceValue" class="lat_lon mt-6 flex justify-center">
+                <h1 class="block text-gray-700 text-sm font-bold mb-2"></>
+                <!-- Lat: {{ end[0] }}, Long: {{ end[1]}} -->
+                Shortest Distance = {{distance[0]}} km <br>
+                Duration ={{ distance[1] }} hours
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+<!-- 
+
+    <script>
+        var map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    
+        // Function to create and add markers from data
+        function addMarkers(data) {
+            for (var i = 0; i < data.length; i++) {
+                L.marker([data[i].lat, data[i].lng]).addTo(map).bindPopup(data[i].label);
+            }
+        }
+    
+        // Function to create and add a path from polyline coordinates
+        function addPath(coordinates) {
+            var path = L.polyline(coordinates, {color: 'blue'}).addTo(map);
+            map.fitBounds(path.getBounds());  // Adjust map view to fit the path
+        }
+    
+        // Get data from Flask template
+        var markers = {{markers | safe }};
+        var path = {{path | safe }};
+    
+        // Add markers and path to the map
+        addMarkers(markers);
+        addPath(path);
+    </script> -->
+    
 </body>
+
 </html>

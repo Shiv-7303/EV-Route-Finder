@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>2nd Page</title>
+        <!-- Remove the integrity attribute from the Leaflet CSS link -->
+        <link rel="stylesheet"
+            href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+        <link rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+            integrity="sha512-QhkA4vRQoy+lAIfVwSKO6B9byVBDw5xU/M/j9XtUHbOeboOkWFKcXqknxwYcIcBVxTtNEtFUS+/s/QoEzE6ytQ=="
+            crossorigin />
+        <link href="{{url_for('static',filename='css/output.css')}}"
+            rel="stylesheet">
+
+        <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+    </head>
+
+    <body>
+        <!-- Create a div to hold the map -->
+        <!-- Create a div to hold the map -->
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+        // Function to initialize the map
+        function initMap() {
+            // Create a Leaflet map centered at the first marker
+            var map = L.map('map').setView([{{ markers[0][1] }} , {{ markers[0][0] }}], 13);
+
+        // Add a tile layer for the map background
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add source marker
+        L.marker([{{ markers[0][1] }}, {{ markers[0][0] }}]).addTo(map)
+            .bindPopup('Source: {{ source }}'); // You can customize the popup content
+
+        // Add destination marker
+        L.marker([{{ markers[-1][1] }}, {{ markers[-1][0] }}]).addTo(map)
+            .bindPopup('Destination: {{ destination }}'); // You can customize the popup content
+
+        // Add a polyline to represent the path
+        var path = [
+            {% for point in path %}
+        [{{ point[1] }}, {{ point[0] }}],
+            {% endfor %}
+        ];
+
+        L.polyline(path, { color: 'blue' }).addTo(map);
+    }
+
+        // Call the initMap function when the page is loaded
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+
+    </body>
+
+</html>
