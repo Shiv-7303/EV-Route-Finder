@@ -60,6 +60,7 @@ def lat_lon():
 
 @app.route('/get_directions', methods=['POST', 'GET'])
 def get_direction():
+    DISTANCE = (0, 0)
     if request.method == 'POST':
         source = request.form.get('start_address')
         destination = request.form.get('end_address')
@@ -83,22 +84,35 @@ def get_direction():
 
         # Send request and handle response
         try:
+            lat1, lon1, lat2, lon2 = 0, 0, 0, 0
+       
             response = requests.get(f'https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf624858f0340ff04a4eaa9a0d9fc20803e0bb&start={src_corr[1]},{src_corr[0]}&end={des_corr[1]},{des_corr[0]}',headers=headers)
-            response.raise_for_status()  # Raise an exception for error codes
+            response.raise_for_status() 
             directions_data = response.json()
+            # Raise an exception for error codes
+            directions_data = response.json()
+            lat1, lon1 = src_corr
+            lat2, lon2 = des_corr
+            DISTANCE = get_distance(lat1, lon1, lat2, lon2)
+            distance = DISTANCE[0]
+            duration = round(DISTANCE[1], 2)
+            if duration < 1:
+                duration = f"{round(duration * 100, 2)} min" 
+            else:
+                duration = f"{round(duration, 2)} hr"
+            print(DISTANCE)
             print(directions_data)
             # Extract relevant data for markers and path (adapt based on API response structure)
             # Assuming markers are embedded in the "geometry" property
             markers = directions_data['features'][0]['geometry']['coordinates']
             path = directions_data['features'][0]['geometry']['coordinates']
-            print(markers)
-            return render_template('map.html', markers=markers, path=path , source = source, destination = destination)
+            return render_template('map.html', markers=markers,distance = distance, duration = duration, path=path , source = source, destination = destination,directions_data=directions_data if 'directions_data' in locals() else None)
 
         except requests.exceptions.RequestException as e:
             print(f"Error: {e}")
             # Handle errors appropriately (e.g., return error message to user)
             return redirect("/")
-    return render_template("map.html",markers=markers, path=path , source = source, destination = destination)
+    return render_template("map.html",markers=markers,distance = distance, duration = duration, path=path , source = source, destination = destination,directions_data=directions_data if 'directions_data' in locals() else None)
 
 if __name__ == "__main__":
     app.run(debug=True)
